@@ -1,5 +1,5 @@
 {
-  "name": "learn-MERN",
+  "name": "learn-mern",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "config": "^3.3.7",
     "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.6"
   },

@@ -1,0 +1,9 @@
+import mongoose from "mongoose";
+
+const User = new mongoose.Schema({
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  todos: [{ type: mongoose.Types.ObjectId, ref: "Task" }],
+});
+
+export default mongoose.model("User", User);
