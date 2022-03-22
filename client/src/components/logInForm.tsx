@@ -4,6 +4,7 @@ import style from '../styles/formStyle.module.css';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import superagent from "superagent"
+import { Link } from "react-router-dom"
 
 interface RegForm {
     email: string,
@@ -14,16 +15,11 @@ export function LoginForm() {
     const [successReg, setSuccessReg] = useState("");
     const [form] = Form.useForm();
 
-    useEffect(() => { setTimeout(() => { setSuccessReg("") }, 3000) }, [successReg])
-
     const createUser = async (user: RegForm) => {
-        try {
-            const post = await superagent.post("/register").send(user);
-            const response = post.body
-            setSuccessReg(response)
-            form.resetFields()
-        }
-        catch (error: any) { console.log(error.message) }
+        const post = await superagent.post("/register").send(user);
+        const response = post.body;
+        setSuccessReg(response);
+        form.resetFields();
     };
 
     return (
@@ -80,10 +76,10 @@ export function LoginForm() {
                         offset: 8,
                     }}
                 >
-                    <Button type="primary" htmlType="submit" style={{ marginRight: "auto", marginLeft: "auto" }}>
-                        Register
-                    </Button>
-                    {/* Or <a href="">register now!</a> */}
+                    <Link to='/main'> <Button type="primary" htmlType="submit" style={{ marginRight: "auto", marginLeft: "auto" }}>
+                        Log In
+                    </Button></Link>
+                    <Link to="/register"><span className={style.regLink}>Create account</span></Link>
                 </Form.Item>
             </Form>
         </div>

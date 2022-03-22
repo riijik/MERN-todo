@@ -1,9 +1,18 @@
 import React from 'react';
-import { LoginForm } from './components/authForm';
+import { RegForm } from './components/regForm';
+import { LoginForm } from './components/logInForm';
+import { MainPage } from './components/mainPage';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 export function App() {
   return (
-    <LoginForm />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<LoginForm />} />
+        <Route path='/register' element={<RegForm />} />
+        <Route path='/main' element={<MainPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
