@@ -12,19 +12,17 @@ interface RegForm {
 }
 
 export function LoginForm() {
-    const [successReg, setSuccessReg] = useState("");
     const [form] = Form.useForm();
 
     const createUser = async (user: RegForm) => {
-        const post = await superagent.post("/register").send(user);
+        const post = await superagent.post("/login").send(user);
         const response = post.body;
-        setSuccessReg(response);
+        console.log(response)
         form.resetFields();
     };
 
     return (
         <div className={style.formContainer}>
-            {successReg && <b className={style.successRegMessage}>Пользователь успешно зарегестрирован</b>}
             <Form
                 form={form}
                 name="normal_login"
@@ -76,9 +74,9 @@ export function LoginForm() {
                         offset: 8,
                     }}
                 >
-                    <Link to='/main'> <Button type="primary" htmlType="submit" style={{ marginRight: "auto", marginLeft: "auto" }}>
+                    <Button type="primary" htmlType="submit" style={{ marginRight: "auto", marginLeft: "auto" }}>
                         Log In
-                    </Button></Link>
+                    </Button>
                     <Link to="/register"><span className={style.regLink}>Create account</span></Link>
                 </Form.Item>
             </Form>
