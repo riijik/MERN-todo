@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import 'antd/dist/antd.min.css';
 import style from '../styles/formStyle.module.css';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import superagent from "superagent"
 import { Link } from "react-router-dom"
+import { MyContext } from "../App";
+
+
 
 interface RegForm {
     email: string,
@@ -13,13 +16,26 @@ interface RegForm {
 
 export function LoginForm() {
     const [form] = Form.useForm();
+    const [token, setToken] = useState("")
 
-    const createUser = async (user: RegForm) => {
+    const credentialState = useContext(MyContext)
+    console.log(credentialState)
+
+    const checkUser = async (user: RegForm) => {
         const post = await superagent.post("/login").send(user);
         const response = post.body;
-        console.log(response)
-        form.resetFields();
+        setToken(response.accessToken)
+        localStorage.setItem("token", response.accessToken)
     };
+    useEffect(() => {
+        getUserTodo()
+    }, [token])
+
+    const getUserTodo = async () => {
+        const data = await fetch("/todo", { method: "GET", headers: { 'x-access-token': token } })
+        console.log(data.json)
+    }
+
 
     return (
         <div className={style.formContainer}>
@@ -33,7 +49,7 @@ export function LoginForm() {
                 initialValues={{
                     remember: true,
                 }}
-                onFinish={(form: RegForm) => { createUser(form) }}
+                onFinish={(form: RegForm) => { checkUser(form) }}
             >
                 <Form.Item
                     name="email"

@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { RegForm } from './components/regForm';
 import { LoginForm } from './components/logInForm';
 import { MainPage } from './components/mainPage';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
+interface Context {
+  username?: string,
+  password?: string
+}
+
+export const MyContext = React.createContext<Context | null>(null)
+
 export function App() {
-  const [isAuth, setIsAuth] = useState(false)
+  const [credentialState, setCredentialState] = useState({
+    // username: "Rodger",
+    // password: "123"
+  })
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={isAuth ? (<MainPage />) : (<LoginForm />)} />
-        <Route path='/register' element={<RegForm />} />
-      </Routes>
-    </BrowserRouter>
+    <MyContext.Provider value={credentialState}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={(<LoginForm />)} />
+          <Route path='/register' element={<RegForm />} />
+        </Routes>
+      </BrowserRouter>
+    </MyContext.Provider>
   );
 }
 
