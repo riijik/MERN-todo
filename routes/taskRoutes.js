@@ -7,7 +7,7 @@ export const taskRouter = Router();
 taskRouter.post("/todo", authMiddleware, async (req, res) => {
   if (req.body.action) {
     // Task.create(req.body).then((data) => res.json(data));
-    const { action } = req.body.action;
+    const  action  = req.body.action;
     const newTask = new Task({ action, owner: req.user.userId });
     await newTask.save();
     res.status(201).json({ newTask });

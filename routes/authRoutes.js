@@ -2,7 +2,6 @@ import { Router } from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import Token from "../models/Token.js";
 import config from "config";
 
 export const authRouter = Router();
@@ -34,18 +33,13 @@ authRouter.post("/login", async (req, res) => {
     if (!isPasswordTrue) {
       return res.status(400).json({ message: "Неверный пароль" });
     }
-    const accessToken = jwt.sign({ userId: user._id }, config.get("jwtSecret"), {
-      expiresIn: "1h",
-    });
-    // const refreshToken = jwt.sign({ userId: user._id }, process.env.JWT_ACCESS_SECRET, {
-    //   expiresIn: "30d",
-    // });
-    // const refreshTokenData = await Token.findOne({user: user._id})
-    // if (refreshTokenData) {
-    //   refreshTokenData.refreshToken = refreshToken
-    //   await refreshTokenData.save()
-    // }
-    
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      config.get("jwtSecret"),
+      {
+        expiresIn: "8h",
+      }
+    );
     res.json({ accessToken, userId: user._id });
   } catch (e) {
     res.status(500).json({ message: "Сервер не работает" });
@@ -54,4 +48,3 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/logout", async (req, res) => {});
 
-authRouter.get("/refresh", async (req, res) => {});

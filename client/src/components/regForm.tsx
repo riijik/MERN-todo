@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import 'antd/dist/antd.min.css';
 import style from '../styles/formStyle.module.css';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import superagent from "superagent";
 import { useNavigate } from 'react-router-dom';
-import { MyContext } from "../App";
 
 interface RegForm {
     email: string,
@@ -13,16 +12,16 @@ interface RegForm {
 }
 
 export function RegForm() {
-    // const [,setCredentials] = useContext(MyContext)
     const [form] = Form.useForm();
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const createUser = async (user: RegForm) => {
         try {
-            const post = await superagent.post("/register").send(user).then(() => { navigate("/") });
+            await superagent.post("/register").send(user).then(() => { navigate("/") });
             form.resetFields();
         } catch (err) {
+            form.resetFields();
             const errorToJson = JSON.stringify(err);
             const errorToObj = JSON.parse(errorToJson);
             const errMessage = JSON.parse(errorToObj.response.text);
@@ -31,7 +30,7 @@ export function RegForm() {
     };
     return (
         <div className={style.formContainer}>
-            {error ? <b style={{ textAlign: "center", color: "red" }}>{error}</b> : null}
+            {error ? <b style={{ textAlign: "center", color: "red", marginBottom: "10px" }}>{error}</b> : null}
             <Form
                 form={form}
                 name="normal_login"

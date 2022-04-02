@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import 'antd/dist/antd.min.css';
 import style from '../styles/formStyle.module.css';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import superagent from "superagent"
-import { Link } from "react-router-dom"
-import { MyContext } from "../App";
-
-
+import { Link, useNavigate } from "react-router-dom"
 
 interface RegForm {
     email: string,
@@ -16,29 +13,28 @@ interface RegForm {
 
 export function LoginForm() {
     const [form] = Form.useForm();
-    const [token, setToken] = useState("")
-
-    const credentialState = useContext(MyContext)
-    console.log(credentialState)
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
 
     const checkUser = async (user: RegForm) => {
-        const post = await superagent.post("/login").send(user);
-        const response = post.body;
-        setToken(response.accessToken)
-        localStorage.setItem("token", response.accessToken)
+        try {
+            const post = await superagent.post("/login").send(user);
+            const response = post.body;
+            localStorage.setItem("token", response.accessToken);
+            navigate("/main")
+        }
+        catch (err) {
+            form.resetFields();
+            const errorToJson = JSON.stringify(err);
+            const errorToObj = JSON.parse(errorToJson);
+            const errMessage = JSON.parse(errorToObj.response.text);
+            setError(errMessage.message)
+        }
     };
-    useEffect(() => {
-        getUserTodo()
-    }, [token])
-
-    const getUserTodo = async () => {
-        const data = await fetch("/todo", { method: "GET", headers: { 'x-access-token': token } })
-        console.log(data.json)
-    }
-
 
     return (
         <div className={style.formContainer}>
+            {error ? <b style={{ textAlign: "center", color: "red", marginBottom: "10px" }}>{error}</b> : null}
             <Form
                 form={form}
                 name="normal_login"
