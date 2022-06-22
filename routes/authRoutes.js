@@ -35,9 +35,9 @@ authRouter.post("/login", async (req, res) => {
     }
     const accessToken = jwt.sign(
       { userId: user._id },
-      config.get("jwtSecret"),
+      config.get("jwtSecret"), // передаём секрет по которму сможем аутентифицироваться
       {
-        expiresIn: "8h",
+        expiresIn: "1h",
       }
     );
     res.json({ accessToken, userId: user._id });
@@ -47,4 +47,3 @@ authRouter.post("/login", async (req, res) => {
 });
 
 authRouter.post("/logout", async (req, res) => {});
-
