@@ -6,7 +6,8 @@ export const authMiddleware = (req, res, next) => {
     return next();
   } //исключаем метод OPTIONS
   try {
-    const token = req.headers["authorization"];
+    // const token = req.headers["authorization"];
+    const token = req.cookies.access_token;
     if (!token) {
       return res.status(401).json({ message: "Пользователь не авторизован" });
     }

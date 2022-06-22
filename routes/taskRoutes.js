@@ -5,11 +5,9 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 export const taskRouter = Router();
 
 taskRouter.post("/todo", authMiddleware, async (req, res) => {
-  console.log(req);
   if (req.body.action) {
     // Task.create(req.body).then((data) => res.json(data));
     const action = req.body.action;
-    console.log("i am req user from router", req.user);
     const newTask = new Task({ action, owner: req.user.userId });
     await newTask.save();
     res.status(201).json({ newTask });

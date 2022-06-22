@@ -73,5 +73,6 @@ async function getTaskList() {
   const data = await superagent
     .get("/todo")
     .set("Authorization", localStorage.token);
+  console.log(data);
   return data.body;
 }

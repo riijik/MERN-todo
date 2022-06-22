@@ -19,6 +19,7 @@ export function LoginForm() {
   const checkUser = async (user: RegForm) => {
     try {
       const post = await superagent.post("/login").send(user);
+      console.log(post);
       const response = post.body;
       localStorage.setItem("token", response.accessToken);
       navigate("/main");

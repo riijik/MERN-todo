@@ -40,7 +40,17 @@ authRouter.post("/login", async (req, res) => {
         expiresIn: "1h",
       }
     );
-    res.json({ accessToken, userId: user._id });
+
+    res
+      .cookie("access_token", accessToken, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({ message: "Logged in successfully 😊 👌" });
+
+    // res.json({ accessToken, userId: user._id });
+    // res.cookie("auth-token", accessToken);
+    // res.send("Set Cookie");
   } catch (e) {
     res.status(500).json({ message: "Сервер не работает" });
   }
